@@ -1,0 +1,18 @@
+{
+  "name": "three-starts",
+  "version": "1.0.0",
+  "description": "starts base on three.js ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "three.js",
+    "webgl"
+  ],
+  "author": "mmf",
+  "license": "ISC",
+  "dependencies": {
+    "three.js": "^0.77.1"
+  }
+}
