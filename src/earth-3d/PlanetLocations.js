@@ -90,11 +90,11 @@ export default class PlanetLocations {
             geo.merge(this.hex.geometry, this.hex.matrixWorld);
             geo.merge(this.hex_ring.geometry, this.hex_ring.matrixWorld);
 
-            // l.position = this.hex.position.clone();
+            l.position = this.hex.position.clone();
 
             // and finaly the ray 光柱
-            // l.light = this.addLightRay(this.hex.position, l_year_data.works);
-            // container.add(l.light);
+            l.light = this.addLightRay(this.hex.position, l_year_data.works);
+            container.add(l.light);
 
         }
 
