@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - lights - point lights</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 50%;
+				text-align: center;
+				z-index: 50;
+				display:block;
+			}
+			#info a {
+				color: #ff0080;
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - point lights WebGL demo.<br />
+			Walt Disney head by <a href="http://davidoreilly.com/post/18087489343/disneyhead" target="_blank" rel="noopener">David OReilly</a>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/98/three.js"></script>
+		<script src="./OrbitControls.js"></script>
+		<script src="./dat.gui.min.js"></script>
+		<script id="sphere_vertexShader" type="x-shader/x-vertex">
+			varying vec2 vUv;
+			void main()
+			{
+				vUv = uv;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+		<!-- fragment shader a.k.a. pixel shader -->
+		<script id="sphere_fragmentShader" type="x-shader/x-vertex">
+			uniform sampler2D tOne;
+			varying vec2 vUv;
+
+			void main()
+			{
+				gl_FragColor= texture2D(tOne, vUv);
+			}
+		</script>
+		  <!-- vertext shader a.k.a. pixel shader -->
+		<script id="vertexShader" type="x-shader/x-vertex">
+			varying vec3 vNormal;
+			varying vec3 vPositionNormal;
+			void main()
+			{
+			vNormal = normalize( normalMatrix * normal ); // 转换到视图空间
+			vPositionNormal = normalize(( modelViewMatrix * vec4(position, 1.0) ).xyz);
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+		<!-- fragment shader a.k.a. pixel shader -->
+		<script id="fragmentShader" type="x-shader/x-vertex">
+			uniform vec3 glowColor;
+			uniform float b;
+			uniform float p;
+			uniform float s;
+			varying vec3 vNormal;
+			varying vec3 vPositionNormal;
+			void main()
+			{
+			float a = pow( b + s * abs(dot(vNormal, vPositionNormal)), p );
+			gl_FragColor = vec4( glowColor, a );
+			}
+		</script>
+		<script>
+
+			var camera, scene, renderer,controls, moonGlow,
+				light1, light2, light3, light4,spriteSphere,
+				sphereTest3, sphereTest2, sphereTest1,
+				object, stats;
+
+			var clock = new THREE.Clock();
+
+			init();
+			animate();
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.z = 200;
+
+				scene = new THREE.Scene();
+				// addBackLightTexture();
+
+				createShaderMoon();
+				initGui();
+
+
+				var light = new THREE.AmbientLight( 0xffffff ); // soft white light
+				scene.add( light );
+				scene.background = new THREE.Color( 0xaaaaaa);
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+				controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+				//stats
+
+				// stats = new Stats();
+				// document.body.appendChild( stats.dom );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function createShaderMoon() {
+				let customMaterial = new THREE.ShaderMaterial(
+					{
+						uniforms:
+						{
+						"s":   { type: "f", value: -1.0},
+						"b":   { type: "f", value: 1.0},
+						"p":   { type: "f", value: 2.0 },
+						glowColor: { type: "c", value: new THREE.Color(0x00ffff) }
+						},
+						vertexShader: document.getElementById( 'vertexShader' ).textContent,
+						fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+						side: THREE.FrontSide,
+						blending: THREE.AdditiveBlending,
+						transparent: true,
+					});
+				moonGlow = new THREE.Mesh( new THREE.SphereGeometry(30, 64, 64), customMaterial.clone() );
+				scene.add(moonGlow);
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			var gui;
+
+			function initGui() {
+
+				//声明一个保存需求修改的相关数据的对象
+
+				gui = {
+
+					s:-2,
+
+					b:1,
+
+					p:2,
+
+				};
+
+				var datGui = new dat.GUI();
+
+				//将设置属性添加到gui当中，gui.add(对象，属性，最小值，最大值）
+
+				datGui.add(gui,"s",-10,10);
+
+				datGui.add(gui,"b",-10,10);
+
+				datGui.add(gui,"p",-10,10);
+
+			}
+
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+
+
+				// stats.update();
+
+			}
+
+			function render() {
+				renderer.render( scene, camera );
+				moonGlow.material.uniforms[ 's' ].value = gui.s;
+				moonGlow.material.uniforms[ 'b' ].value = gui.b;
+				moonGlow.material.uniforms[ 'p' ].value = gui.p;
+
+				controls.update();
+			}
+
+		</script>
+	</body>
+</html>
