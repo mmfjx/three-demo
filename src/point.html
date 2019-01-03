@@ -19,11 +19,10 @@
         <script src="./OrbitControls.js"></script>
         <script src="./tween.js"></script>
         <script>
-            var camera, scene, renderer,controls,
-            maxParticles, text,
+            var camera, scene, renderer,controls, clock,
+            maxParticles, text,fly,
             sphere, sphereGeometry, particles;
 
-            var clock = new THREE.Clock();
 
             init();
             animate();
@@ -36,6 +35,8 @@
 
                 var light = new THREE.AmbientLight( 0xffffff ); // soft white light
                 scene.add( light );
+
+                scene.add( new THREE.AxesHelper( 100 ) );
 
                 renderer = new THREE.WebGLRenderer();
                 renderer.setPixelRatio( window.devicePixelRatio );
@@ -90,23 +91,56 @@
                 });
                 sphere = new THREE.Points(sphereGeometry, material);
                 scene.add(sphere);
-                for(let count = 0;count < positions3.length / 3;count++) {
-                    let position = sphere.geometry.attributes.position;
-                    // console.log(position.getY(count));
-                    if (position.getY(count).toFixed(0) === -60) {
-                        return;
+                setTimeout(() => {
+                    fly = true;
+                    clock = new THREE.Clock();
+                }, 1000)
+            }
+            function update() {
+                let position = sphere.geometry.attributes.position;
+                let delta = clock.getDelta() * 10;
+                let speed = 20;
+                // 分奇偶
+                for(let i = 0;i < sphere.geometry.attributes.position.count;i++) {
+                    let px = position.getX(i);
+                    let py = position.getY(i);
+                    let pz = position.getZ(i);
+                    let x;
+                    let toX;
+                    if (i % 2 == 1) {
+                        if (px > 0) {
+                        toX = THREE.Math.randInt(px, px + 10);
+                        x = px + toX / (px + toX) * speed * delta;
+                        } else {
+                            toX = THREE.Math.randInt(px, px - 10);
+                            x = px - toX / (px + toX) * speed * delta;
+                        }
+                        sphere.geometry.attributes.position.setX(i, x);
+                        sphere.geometry.attributes.position.needsUpdate = true;
                     }
-                    let fly = {
-                        y: position.getY(count)
-                    };
-                    new TWEEN.Tween(fly)
-                        .to({y: -60}, 2000)
-                        .onUpdate((fly) => {
-                            sphere.geometry.attributes.position.setY(count, fly.y);
-                            sphere.geometry.attributes.position.needsUpdate = true;
-                        })
-                        .start();
+                       
                 }
+                setTimeout(() => {
+                    for(let i = 0;i < sphere.geometry.attributes.position.count;i++) {
+                        let px = position.getX(i);
+                        let py = position.getY(i);
+                        let pz = position.getZ(i);
+                        let x;
+                        let toX;
+                        if (i % 2 === 0) {
+                            if (px > 0) {
+                            toX = THREE.Math.randInt(px, px + 10);
+                            x = px + toX / (px + toX) * speed * delta;
+                            } else {
+                                toX = THREE.Math.randInt(px, px - 10);
+                                x = px - toX / (px + toX) * speed * delta;
+                            }
+                            sphere.geometry.attributes.position.setX(i, x);
+                            sphere.geometry.attributes.position.needsUpdate = true;
+                        }
+                    }
+                }, 300)
+                
 
             }
 
@@ -161,6 +195,9 @@
                 requestAnimationFrame( animate );
                 render();
                 TWEEN.update();
+                if (fly) {
+                    update();
+                }
             }
 
             function render() {

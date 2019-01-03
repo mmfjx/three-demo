@@ -67,7 +67,7 @@ export default class PlanetLocations {
             let l = this.data_locations[i];
             _locations.push(l); /// All Locations are available in all Years
         }
-
+        debugger;
         var geo;
         var geo_yellow = new THREE.Geometry(); //hex.geometry.clone();
         var geo_white = new THREE.Geometry(); //hex.geometry.clone();
@@ -94,7 +94,7 @@ export default class PlanetLocations {
 
             // and finaly the ray 光柱
             l.light = this.addLightRay(this.hex.position, l_year_data.works);
-            container.add(l.light);
+            // container.add(l.light);
 
         }
 
