@@ -31,10 +31,7 @@ export default class PlanetLocations {
         for (let i = 0; i < this.data_locations.length; i++) {
             this.f_images.push(this.data_locations[i].preview);
         }
-        this.hex = Utils.createHexagon(.2, false, undefined); //六边形网格
-        this.hex_ring = Utils.createHexagon(.25, false, undefined, .02); //网格边框
-        this.hex.add(this.hex_ring);
-        console.log(this.hex )
+
 
         this.r = planet.radius * 1.005;
         this.zero = new THREE.Vector3();
@@ -71,7 +68,10 @@ export default class PlanetLocations {
         var geo;
         var geo_yellow = new THREE.Geometry(); //hex.geometry.clone();
         var geo_white = new THREE.Geometry(); //hex.geometry.clone();
-
+        let hex = Utils.createHexagon(.2, false, undefined); //六边形网格
+        let hex_ring = Utils.createHexagon(.25, false, undefined, .02); //网格边框
+        hex.add(hex_ring);
+        console.log(this.hex )
         for (let i = 0; i < _locations.length; i++) {
 
             var l = _locations[i];
@@ -81,25 +81,27 @@ export default class PlanetLocations {
             l.country = this.data.countries_by_id[l.country_id];
 
             var uv = this.planet.googlePosToUV(l.planet_u, l.planet_v);
-            Utils.setFromSpherical(this.r, uv.v, uv.u, this.hex.position);
-            this.hex.lookAt(new THREE.Vector3(0, 0, 0));
-            this.hex.updateMatrix();
-            this.hex.updateMatrixWorld();
+            Utils.setFromSpherical(this.r, uv.v, uv.u, hex.position);
+            // hex.lookAt(new THREE.Vector3(0, 0, 0));
+            hex.updateMatrix();
+            hex.updateMatrixWorld();
+            console.log('hex', hex);
 
             geo = l_year_data.works ? geo_yellow : geo_white;
-            geo.merge(this.hex.geometry, this.hex.matrixWorld);
-            geo.merge(this.hex_ring.geometry, this.hex_ring.matrixWorld);
+            geo.merge(hex.geometry, hex.matrixWorld);
+            geo.merge(hex_ring.geometry, hex_ring.matrixWorld);
 
-            l.position = this.hex.position.clone();
+            // l.position = hex.position.clone();
 
             // and finaly the ray 光柱
-            l.light = this.addLightRay(this.hex.position, l_year_data.works);
-            container.add(l.light);
+            // l.light = this.addLightRay(hex.position, l_year_data.works);
+            // container.add(l.light);
 
         }
 
         // 黄色图标
         var hexs_yellow = new THREE.Mesh(geo_yellow, this.material_yellow);
+        console.log('hexs_yellow', hexs_yellow);
         container.add(hexs_yellow);
 
         // 白色图标

@@ -101,7 +101,8 @@
 
 				var light = new THREE.AmbientLight( 0xffffff ); // soft white light
 				scene.add( light );
-				// scene.background = new THREE.Color( 0xff0000 );
+				scene.background = new THREE.Color( 0x000000 );
+
 				renderer = new THREE.WebGLRenderer({ alpha: true });
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
