@@ -220,7 +220,7 @@ export default class Earth {
         geometry.computeBoundingSphere();
 
         let material = new THREE.PointsMaterial();
-        material.size = 6;
+        material.size = 4;
         material.map = texture;
         material.depthWrite = false;
 
