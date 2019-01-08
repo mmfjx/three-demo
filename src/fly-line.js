@@ -8,17 +8,17 @@ export default class FlyLine {
             // 中间点的高度
             this.height = data.height;
         }
-        this.color = tinycolor(data.color).toHsl();
+        this.color = tinycolor(data.color || 'D4D89B').toHsl();
         this.flyTime = data.flyTime || 2000;
-        this.noContinuous = data.noContinuous || false;
-        this.shortLineLength = data.shortLineLength || 10;
-        this.lineWidth = data.lineWidth || 1;
+        this.noContinuous = data.noContinuous || false; // 是否是连续飞线
+        this.shortLineLength = data.shortLineLength || 10; // 非连续线段的飞线长度
 
         this.createFlyLine();
     }
     createFlyLine() {
         let curveData = null;
         if (this.points && this.points.length) {
+            // 创建3d样本曲线
             curveData = new THREE.CatmullRomCurve3(this.points);
         } else {
             let middleCurvePositionX = (this.startPos.x + this.endPos.x) / 2;
@@ -35,6 +35,7 @@ export default class FlyLine {
         this.curveModelData = curveData.getPoints( 50 );
         this.geometry = new THREE.Geometry();
         this.geometry.vertices = this.curveModelData;
+        // 设置渐变色
         for (let i = 0; i < this.geometry.vertices.length; i++) {
             this.geometry.colors[i] = new THREE.Color(
                 // `hsl(120, ${i / this.geometry.vertices.length * 100}%, 48%)`
@@ -43,7 +44,6 @@ export default class FlyLine {
         }
         this.material = new THREE.LineBasicMaterial({
             vertexColors: THREE.VertexColors,
-            linewidth: this.lineWidth,
         });
         this.curve = new THREE.Line(this.geometry, this.material);
 
@@ -67,6 +67,7 @@ export default class FlyLine {
         if (!curvePartialData.points.length) {
             return;
         }
+        // this.curve.geometry.vertices = curveData;
         this.curve.geometry.vertices = curvePartialData.getPoints(50);
         for (let i = 0; i < this.curve.geometry.vertices.length; i++) {
             this.curve.geometry.colors[i] = new THREE.Color(
