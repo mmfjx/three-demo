@@ -13,11 +13,9 @@
         </style>
     </head>
     <body>
-        <script src="//s3plus.meituan.net/v1/mss_814dc1610cda4b2e8febd6ea2c809db5/distribute/79960b81-79bd-4d50-9c50-2a6ae5b9926c_1540204574498?filename=three%400.97.0.min.js"></script>
-
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/98/three.js"></script> -->
-        <script src="./OrbitControls.js"></script>
-        <script src="./tween.js"></script>
+        <script src="../lib/three.js"></script>
+        <script src="../lib/OrbitControls.js"></script>
+        <script src="../lib/tween.js"></script>
         <script>
             var camera, scene, renderer,controls, clock,
             maxParticles, text,fly,
@@ -100,7 +98,7 @@
                     flyTween = false;
                     clock = new THREE.Clock();
                     // console.log('clock');
-                }, 100)
+                }, 3000)
             }
             function update() {
                 let position = sphere.geometry.attributes.position;

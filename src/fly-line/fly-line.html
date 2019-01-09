@@ -13,10 +13,10 @@
         </style>
     </head>
     <body>
-        <script src="./three.js"></script>
-        <script src="./OrbitControls.js"></script>
-        <script src="./tween.js"></script>
-        <script src="./lib/tinycolor-min.js"></script>
+        <script src="../lib/three.js"></script>
+        <script src="../lib/OrbitControls.js"></script>
+        <script src="../lib/tween.js"></script>
+        <script src="../lib/tinycolor-min.js"></script>
         <script type="module">
             import FlyLine from './fly-line.js';
             let camera, scene, renderer,controls, clock,flyLine;
@@ -55,10 +55,16 @@
                 let geo = new THREE.ShapeGeometry( heartShape );
                 flyLine = new FlyLine({
                     points: geo.vertices,
+                    points: [
+                        new THREE.Vector3(-10, 0, 0),
+                        new THREE.Vector3(-5, 10, 5),
+                        new THREE.Vector3(0, -10, 0),
+                        new THREE.Vector3(10, 0, 10)
+                    ],
                     // startPos: new THREE.Vector3(0, 0, 0),
                     // endPos: new THREE.Vector3(50, 0, 0),
                     // height: 10,
-                    noContinuous: true,
+                    noContinuous: false,
                     color: 'ff00ff',
                     flyTime: 3000,
                 });
