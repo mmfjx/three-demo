@@ -95,7 +95,7 @@
 
 				var light = new THREE.AmbientLight( 0xffffff ); // soft white light
 				scene.add( light );
-				scene.background = new THREE.Color( 0x000000 );
+				scene.background = new THREE.Color( 0x111111 );
 
 				renderer = new THREE.WebGLRenderer({ alpha: true });
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -120,7 +120,7 @@
 						{
 						"c":   { type: "f", value: 0.0},
 						"p":   { type: "f", value: 2.0 },
-						glowColor: { type: "c", value: new THREE.Color(0x00ffff) }
+						glowColor: { type: "c", value: new THREE.Color(0x44B3E3) }
 						},
 						vertexShader: document.getElementById( 'vertexShader' ).textContent,
 						fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
