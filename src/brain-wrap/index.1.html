@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - lights - point lights</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				margin: 0px;
+				overflow: hidden;
+			}
+            #btn {
+                position: absolute;
+                top: 0px;
+            }
+		</style>
+	</head>
+	<body>
+		<script src="../lib/three.js"></script>
+		<script src="../lib/OrbitControls.js"></script>
+        <script>
+        var container;
+
+        var camera, scene, renderer;
+
+        init();
+        animate();
+        function init() {
+            container = document.createElement( 'div' );
+            document.body.appendChild( container );
+
+            camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
+            camera.position.z = 100;
+
+            scene = new THREE.Scene();
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            container.appendChild( renderer.domElement );
+        }
+
+        function animate() {
+            requestAnimationFrame( animate );
+            renderer.render( scene, camera );
+        }
+
+        var planes = [];
+        function testplanes(){
+            for(var i=0; i<100; i++){
+                var m = new THREE.Mesh( 	new THREE.PlaneBufferGeometry( 1, 1 ),
+                                            new THREE.MeshBasicMaterial( {color: 0x010101*i } ));
+                m.position.x = -50+i;
+                scene.add( m );
+                planes.push(m);
+            }
+        }
+
+        function delplanes(){
+            for(var i=0; i<100; i++){
+                scene.remove(planes[i]);
+                planes[i].geometry.dispose();
+                planes[i].material.dispose();
+                planes[i] = null;
+                renderer.dispose();
+            }
+        }
+        </script>
+	</body>
+</html>

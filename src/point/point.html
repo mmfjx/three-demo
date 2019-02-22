@@ -98,13 +98,13 @@
                     flyTween = false;
                     clock = new THREE.Clock();
                     // console.log('clock');
-                }, 3000)
+                }, 1000)
             }
             function update() {
                 let position = sphere.geometry.attributes.position;
                 let delta = clock.getDelta() * 10;
                 // console.log(delta);
-                let speed = 1;
+                let speed = 0.3;
                 let spherical = new THREE.Spherical();
                 spherical.radius = 40;
                 let pos = new THREE.Vector3();
@@ -129,22 +129,16 @@
                     // z = pz + to.z * speed * delta;
 
 
-                    // z = 0, 没有视觉冲击感
-                    // x = px + to.x * speed * delta;
-                    // y = py + to.y * speed * delta;
+                    z = 0;//没有视觉冲击感
+                    x = px + to.x * speed * delta;
+                    y = py + to.y * speed * delta;
+                 
                     // z = to.z * speed * delta;
 
-                    x = px + (to.x - px) / dx * speed * delta;
-                    y = py + (to.y - py) / dy * speed * delta;
-                    z = pz > 0 ? pz + Math.abs(to.z) * speed * delta : 2 * Math.abs(pz + to.z * speed * delta);
+                    // x = px + (to.x - px) / dx * speed * delta;
+                    // y = py + (to.y - py) / dy * speed * delta;
+                    // z = pz > 0 ? pz + Math.abs(to.z) * speed * delta : 2 * Math.abs(pz + to.z * speed * delta);
                     // console.log(z);
-
-
-
-                    // sphere.geometry.attributes.position.setXY(i, x, y);
-                    // sphere.geometry.attributes.position.setX(i, x);
-                    // sphere.geometry.attributes.position.setY(i, y);
-                    // sphere.geometry.attributes.position.setZ(i, z);
                     sphere.geometry.attributes.position.setXYZ(i, x, y, z);
                     sphere.geometry.attributes.position.needsUpdate = true;
 
