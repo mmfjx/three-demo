@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>canvas demo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				margin: 0px;
+                background: #000;
+                height: 100vh;
+			}
+        </style>
+        <script src="./tween.1.js"></script>
+	</head>
+	<body>
+        <canvas width="800" height="800" id="cs"></canvas>
+        <script>
+            var canvas = document.getElementById('cs');
+            var ctx = canvas.getContext('2d');
+            // ctx.globalAlpha=.5;
+            ctx.globalCompositeOperation = 'lighter';
+            function draw(len, s, r) {
+                ctx.clearRect(0, 0, 800, 800);
+                ctx.fillStyle = '#61bea2';
+                for (let i = 0; i < 6; i++) {
+                    if (i < 3) {
+                        ctx.fillStyle = '#61bea2';
+                    } else {
+                        ctx.fillStyle = '#529ca0';
+                    }
+                    ctx.save();
+                    ctx.translate(400, 300);
+                    ctx.rotate(Math.PI / 180 * r);
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.arc(Math.cos( i * Math.PI / 3) * len, Math.sin( i * Math.PI / 3) * len, 30 * s, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                ctx.save();
+            }
+
+
+            function update() {
+                let ts = {
+                    l: 0,
+                    s: 0.3,
+                    r: 0
+                };
+                new TWEEN.Tween(ts).to({ l: [60, 0], s: [2, 0.3], r: [180, 0]}, 6000)
+                        .easing(TWEEN.Easing.Quadratic.Out)
+                        .onUpdate(() => {
+                            draw(ts.l, ts.s, ts.r );
+                        })
+                        .repeat(Infinity)
+                        .delay(1000)
+                        .start();
+            }
+            function animate() {
+                requestAnimationFrame(animate);
+                TWEEN.update();
+            }
+            draw(0, 1);
+            update();
+            animate();
+        </script>
+    </body>
+</html>
