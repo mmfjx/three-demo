@@ -49,7 +49,7 @@ export default class PlanetPointed {
 
         for (let sv = 0; sv < this.v_grid; sv++) { // 经度
             let st = (this.u_grid * (1 - Math.sin(sv / this.v_grid * Math.PI))) / this.u_grid + 0.5;
-            for (let su = 0; su < this.u_grid; su += st) { // 纬度 南北两极点密集，中间稀疏
+            for (let su = 0; su < this.u_grid; su += st) { // 纬度 
                 let u = su / this.u_grid;
                 let v = sv / this.v_grid;
                 let is_land = projectiveImage.isLandByUV(u, v);

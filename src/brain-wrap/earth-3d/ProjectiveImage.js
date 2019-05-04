@@ -33,7 +33,7 @@ export default class ProjectiveImage {
         if (this.pixelData == null) {
             this.pixelData = this.projectionContext.getImageData(0, 0, this.img.width, this.img.height);
         }
-        // (y * this.pixelData.width + x) 哪行哪列的像素较差点
+        // (y * this.pixelData.width + x) 哪行哪列的像素交叉点
         return this.pixelData.data[(y * this.pixelData.width + x) * 4] === 0;
     }
 
@@ -43,6 +43,7 @@ export default class ProjectiveImage {
         }
         var x = parseInt(this.img.width * u);
         var y = parseInt(this.img.height * v);
+        // (y * this.pixelData.width + x) 哪行哪列的像素交叉点
         return this.pixelData.data[(y * this.pixelData.width + x) * 4] < 100;
     }
 
