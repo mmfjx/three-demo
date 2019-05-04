@@ -20,7 +20,7 @@
             var canvas = document.getElementById('cs');
             var ctx = canvas.getContext('2d');
             // ctx.globalAlpha=.5;
-            ctx.globalCompositeOperation = 'lighter';
+            ctx.globalCompositeOperation = 'screen';
             function draw(len, s, r) {
                 ctx.clearRect(0, 0, 800, 800);
                 ctx.fillStyle = '#61bea2';
@@ -47,16 +47,16 @@
             function update() {
                 let ts = {
                     l: 0,
-                    s: 0.3,
+                    s: 0.5,
                     r: 0
                 };
-                new TWEEN.Tween(ts).to({ l: [60, 0], s: [2, 0.3], r: [180, 0]}, 6000)
+                new TWEEN.Tween(ts).to({ l: [60, 0], s: [2.2, 0.5], r: [180, 0]}, 12000)
                         .easing(TWEEN.Easing.Quadratic.Out)
                         .onUpdate(() => {
                             draw(ts.l, ts.s, ts.r );
                         })
                         .repeat(Infinity)
-                        .delay(1000)
+                        .delay(500)
                         .start();
             }
             function animate() {
