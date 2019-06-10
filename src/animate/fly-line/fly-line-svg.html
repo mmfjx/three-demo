@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>demo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				margin: 0px;
+                background: #000;
+                height: 100vh;
+			}
+		</style>
+	</head>
+	<body>
+
+        <svg xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="2000" height="1000">
+            <defs>
+                <linearGradient id="linear" gradientUnits="objectBoundingBox" gradientTransform="translate(0, 0)" x1="0%" x2="100%" y1="0%" y2="0%">
+                    <stop offset="0" stop-color="#00EDF2" stop-opacity="0"></stop>
+                    <stop offset="0.4" stop-color="#00EDF2" stop-opacity="0.4"></stop>
+                    <stop offset="0.5" stop-color="#00EDF2" stop-opacity="1"></stop>
+                    <stop offset="0.6" stop-color="#00EDF2" stop-opacity="0.4"></stop>
+                    <stop offset="1" stop-color="#00EDF2" stop-opacity="0"></stop>
+                </linearGradient>
+              </defs>
+              <g>
+                    <text xml:space="preserve"
+                        text-anchor="start"
+                        font-family="Helvetica, Arial, sans-serif"
+                        font-size="178"
+                        y="243.4375" x="111.5"
+                        stroke-width="4"
+                        stroke="url(#linear)"
+                        fill="url(#linear)">linearGradient</text>
+                        <text xml:space="preserve"
+                        text-anchor="start"
+                        font-family="Helvetica, Arial, sans-serif"
+                        font-size="178"
+                         y="643.4375" x="111.5"
+                        stroke-width="4"
+                        stroke="url(#linear)"
+                        fill="transparent">linearGradient</text>
+              </g>
+              <g>
+                  <rect x="110" y="800" width="1100" height="1" fill="url(#linear)"  stroke="url(#linear)"></rect>
+                    <!-- 单线条不展示渐变，因为没有形成区域  -->
+                  <!-- <path d="M100 900 l400 0"  stroke="url(#linear)"></path> -->
+
+                  <path d="M100 900 l400 0 l0 100 l400 0 l0 -100 l400 0"  stroke="url(#linear)" fill="transparent" stroke-width="4"></path>
+              </g>
+        </svg>
+        <script>
+            let linear = document.getElementById('linear');
+             function start() {
+                let ts = {
+                    t: -0.5
+                };
+                new TWEEN.Tween(ts).to({ t: [0.8, -0.5]}, 4000)
+                        .easing(TWEEN.Easing.Quadratic.Out)
+                        .onUpdate(() => {
+                            linear.setAttribute('gradientTransform', `translate(${ts.t}, ${ts.t}) rotate(${ts.t * 30})`);
+                        })
+                        .repeat(Infinity)
+                        .delay(10)
+                        .start();
+                animate();
+            }
+            function animate() {
+                requestAnimationFrame(animate);
+                TWEEN.update();
+            }
+        </script>
+        <script onload="start()" src="../../lib/tween.js"></script>
+	</body>
+</html>
